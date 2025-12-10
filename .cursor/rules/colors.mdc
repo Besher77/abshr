@@ -1,0 +1,15 @@
+Use custom reusable widgets:
+
+CustomCard
+
+CustomButton
+
+CustomTextField
+
+CustomAppBar
+
+No inline styling in widgets → move padding/margin/radius/spacing to constants.
+
+Colors must use AppColors.---
+alwaysApply: true
+---

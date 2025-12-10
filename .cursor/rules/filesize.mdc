@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+No file should exceed 150 lines unless absolutely necessary.
+
+If a file becomes long, split it immediately into smaller files.
+
+Do not put UI, logic, models, utilities, and theme elements in the same file.
+
+Widgets must be moved to separate reusable components.
+
+Theme, colors, spacing, typography must always be in separate files.
+
+Large Views must be broken into partials/ folder widgets.

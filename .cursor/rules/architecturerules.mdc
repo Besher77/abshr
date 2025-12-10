@@ -1,0 +1,24 @@
+---
+alwaysApply: true
+---
+Use GetX + MVC + Clean Code for all modules.
+
+كل شاشة يكون لها:
+
+Controller
+
+View
+
+Model (if needed)
+
+Repository (Mock or local)
+
+لا يُسمح بوضع منطق (Business Logic) داخل الـ Views نهائيًا.
+
+Views must contain UI only.
+
+Controllers handle logic + validation only.
+
+Models store structure only.
+
+Repositories provide data only.

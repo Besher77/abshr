@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "470827117758",
+    "project_id": "abshr-d27bc",
+    "storage_bucket": "abshr-d27bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470827117758:android:2183b0cdb0a880daa682ef",
+        "android_client_info": {
+          "package_name": "com.example.abshr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr_AL0dVfbprQsw-CgePKOWcdte2w0KDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
