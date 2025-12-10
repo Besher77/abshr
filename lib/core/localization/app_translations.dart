@@ -89,6 +89,10 @@ class AppTranslations extends Translations {
       'login_password_label': 'Password',
       'login_forgot_password': 'Forgot password?',
       'login_new_user': 'New user?',
+      'heatmap_details': 'Area Details',
+      'density': 'Density',
+      'close': 'Close',
+      'city': 'City',
     };
   }
 
@@ -153,6 +157,10 @@ class AppTranslations extends Translations {
       'login_password_label': 'كلمة المرور',
       'login_forgot_password': 'نسيت كلمة المرور؟',
       'login_new_user': 'مستخدم جديد؟',
+      'heatmap_details': 'تفاصيل المنطقة',
+      'density': 'الكثافة',
+      'close': 'إغلاق',
+      'city': 'المدينة',
     };
   }
 }

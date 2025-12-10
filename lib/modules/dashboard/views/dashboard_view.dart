@@ -1,3 +1,5 @@
+import 'package:abshr/core/widgets/custom_button.dart';
+import 'package:abshr/modules/census/controllers/census_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
@@ -14,168 +16,272 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DashboardController());
+    final causes = Get.put(CensusController());
 
-    return Scaffold(
-      appBar: const CustomAppBar(
-        titleKey: 'dashboard_title',
-        showLanguageSwitcher: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.paddingM),
+    return SafeArea(
+      child: Scaffold(
+        appBar: const CustomAppBar(
+          titleKey: 'dashboard_title',
+          showLanguageSwitcher: true,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.paddingM),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Total expats card
+              // Citizens and Expats row
+              Obx(() {
+                final data = causes.censusData.value;
+return              Row(
+  children: [
+    Expanded(
+      child: CustomCard(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Total expats card
-            Obx(() => CustomCard(
-                  child: Column(
+            Text(
+              'citizens'.tr,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.textOnDark
+                    : AppColors.textOnLight,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.paddingS),
+            Text(
+              _formatNumber(data!.citizens),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+
+    const SizedBox(width: AppSpacing.paddingM),
+    Expanded(
+      child: CustomCard(
+        child: Column(
+          children: [
+            Text(
+              'total_population'.tr,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.textOnDark
+                    : AppColors.textOnLight,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.paddingS),
+            Text(
+              _formatNumber(data.totalPopulation),
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+
+    const SizedBox(width: AppSpacing.paddingM),
+    Expanded(
+      child: CustomCard(
+        child: Column(
+          children: [
+            Text(
+              'expats'.tr,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.textOnDark
+                    : AppColors.textOnLight,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.paddingS),
+            Text(
+              _formatNumber(data.expats),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: AppColors.secondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ],
+);
+              },),
+
+
+              const SizedBox(height: AppSpacing.paddingM),
+      
+              // Stats grid
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  // Responsive grid based on screen size
+                  final screenWidth = constraints.maxWidth;
+                  final crossAxisCount = screenWidth > 600 ? 3 : 2;
+                  final childAspectRatio = screenWidth > 600 ? 1.3 : 1.4;
+                  
+                  return GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: AppSpacing.paddingM,
+                    mainAxisSpacing: AppSpacing.paddingM,
+                    childAspectRatio: childAspectRatio,
                     children: [
-                      Text(
-                        'total_expats'.tr,
+                  _buildStatCard(
+                    context,
+                    'by_nationality'.tr,
+                    Icons.flag,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'nationality'),
+                  ),
+                  _buildStatCard(
+                    context,
+                    'by_city'.tr,
+                    Icons.location_city,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'city'),
+                  ),
+      
+                  _buildStatCard(
+                    context,
+                    'by_district'.tr,
+                    Icons.map,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'district'),
+                  ),
+                  _buildStatCard(
+                    context,
+                    'by_gender'.tr,
+                    Icons.people,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'gender'),
+                  ),
+                  _buildStatCard(
+                    context,
+                    'by_age'.tr,
+                    Icons.calendar_today,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'age'),
+                  ),
+                  _buildStatCard(
+                    context,
+                    'by_job_type'.tr,
+                    Icons.work,
+                    () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'job_type'),
+                  ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+      
+              // Charts and predictions
+              const SizedBox(height: AppSpacing.paddingM),
+      
+              CustomButton(
+                text: 'city_distribution'.tr,
+                onPressed: () => Get.toNamed(AppRoutes.censusCityDistribution),
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomButton(
+                text: 'demographics'.tr,
+                onPressed: () => Get.toNamed(AppRoutes.censusDemographics),
+                isPrimary: false,
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomButton(
+                text: 'ai_forecasts'.tr,
+                onPressed: () => Get.toNamed(AppRoutes.censusForecasts),
+                isPrimary: false,
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomButton(
+                text: 'service_analytics'.tr,
+                onPressed: () => Get.toNamed(AppRoutes.censusServices),
+                isPrimary: false,
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+      
+              CustomCard(
+                onTap: () => Get.toNamed(AppRoutes.dashboardHeatmap),
+                child: Row(
+                  children: [
+                    const Icon(Icons.map, color: AppColors.primary),
+                    const SizedBox(width: AppSpacing.paddingM),
+                        Expanded(
+                      child: Text(
+                        'heatmap'.tr,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Theme.of(context).brightness == Brightness.dark
                                   ? AppColors.textOnDark
                                   : AppColors.textOnLight,
                             ),
                       ),
-                      const SizedBox(height: AppSpacing.paddingS),
-                      Text(
-                        '${controller.totalExpats.value}',
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                              color: AppColors.primary,
+                    ),
+                    const Icon(Icons.arrow_forward_ios, size: 16),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomCard(
+                onTap: () => Get.toNamed(AppRoutes.dashboardMovement),
+                child: Row(
+                  children: [
+                    const Icon(Icons.show_chart, color: AppColors.primary),
+                    const SizedBox(width: AppSpacing.paddingM),
+                        Expanded(
+                      child: Text(
+                        'movement_chart'.tr,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.textOnDark
+                                  : AppColors.textOnLight,
                             ),
                       ),
-                    ],
-                  ),
-                )),
-            const SizedBox(height: AppSpacing.paddingM),
-
-            // Stats grid
-            LayoutBuilder(
-              builder: (context, constraints) {
-                // Responsive grid based on screen size
-                final screenWidth = constraints.maxWidth;
-                final crossAxisCount = screenWidth > 600 ? 3 : 2;
-                final childAspectRatio = screenWidth > 600 ? 1.3 : 1.4;
-                
-                return GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: AppSpacing.paddingM,
-                  mainAxisSpacing: AppSpacing.paddingM,
-                  childAspectRatio: childAspectRatio,
-                  children: [
-                _buildStatCard(
-                  context,
-                  'by_nationality'.tr,
-                  Icons.flag,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'nationality'),
-                ),
-                _buildStatCard(
-                  context,
-                  'by_city'.tr,
-                  Icons.location_city,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'city'),
-                ),
-                _buildStatCard(
-                  context,
-                  'by_district'.tr,
-                  Icons.map,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'district'),
-                ),
-                _buildStatCard(
-                  context,
-                  'by_gender'.tr,
-                  Icons.people,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'gender'),
-                ),
-                _buildStatCard(
-                  context,
-                  'by_age'.tr,
-                  Icons.calendar_today,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'age'),
-                ),
-                _buildStatCard(
-                  context,
-                  'by_job_type'.tr,
-                  Icons.work,
-                  () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'job_type'),
-                ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios, size: 16),
                   ],
-                );
-              },
-            ),
-            const SizedBox(height: AppSpacing.paddingM),
-
-            // Charts and predictions
-            CustomCard(
-              onTap: () => Get.toNamed(AppRoutes.dashboardHeatmap),
-              child: Row(
-                children: [
-                  const Icon(Icons.map, color: AppColors.primary),
-                  const SizedBox(width: AppSpacing.paddingM),
-                      Expanded(
-                    child: Text(
-                      'heatmap'.tr,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.textOnDark
-                                : AppColors.textOnLight,
-                          ),
-                    ),
-                  ),
-                  const Icon(Icons.arrow_forward_ios, size: 16),
-                ],
+                ),
               ),
-            ),
-            const SizedBox(height: AppSpacing.paddingM),
-            CustomCard(
-              onTap: () => Get.toNamed(AppRoutes.dashboardMovement),
-              child: Row(
-                children: [
-                  const Icon(Icons.show_chart, color: AppColors.primary),
-                  const SizedBox(width: AppSpacing.paddingM),
-                      Expanded(
-                    child: Text(
-                      'movement_chart'.tr,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.textOnDark
-                                : AppColors.textOnLight,
-                          ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomCard(
+                onTap: () => Get.toNamed(AppRoutes.dashboardPredictions),
+                child: Row(
+                  children: [
+                    const Icon(Icons.psychology, color: AppColors.primary),
+                    const SizedBox(width: AppSpacing.paddingM),
+                        Expanded(
+                      child: Text(
+                        'predictions'.tr,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.textOnDark
+                                  : AppColors.textOnLight,
+                            ),
+                      ),
                     ),
-                  ),
-                  const Icon(Icons.arrow_forward_ios, size: 16),
-                ],
+                    const Icon(Icons.arrow_forward_ios, size: 16),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: AppSpacing.paddingM),
-            CustomCard(
-              onTap: () => Get.toNamed(AppRoutes.dashboardPredictions),
-              child: Row(
-                children: [
-                  const Icon(Icons.psychology, color: AppColors.primary),
-                  const SizedBox(width: AppSpacing.paddingM),
-                      Expanded(
-                    child: Text(
-                      'predictions'.tr,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.textOnDark
-                                : AppColors.textOnLight,
-                          ),
-                    ),
-                  ),
-                  const Icon(Icons.arrow_forward_ios, size: 16),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
+  String _formatNumber(int number) {
+    if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
+    }
+    return number.toString();
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
   Widget _buildStatCard(
     BuildContext context,
     String title,

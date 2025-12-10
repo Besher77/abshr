@@ -65,112 +65,15 @@ class CensusOverviewView extends StatelessWidget {
               return Column(
                 children: [
                   // Total Population
-                  CustomCard(
-                    child: Column(
-                      children: [
-                        Text(
-                          'total_population'.tr,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.textOnDark
-                                    : AppColors.textOnLight,
-                              ),
-                        ),
-                        const SizedBox(height: AppSpacing.paddingS),
-                        Text(
-                          _formatNumber(data.totalPopulation),
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                color: AppColors.primary,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: AppSpacing.paddingM),
 
-                  // Citizens and Expats row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomCard(
-                          child: Column(
-                            children: [
-                              Text(
-                                'citizens'.tr,
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: Theme.of(context).brightness == Brightness.dark
-                                          ? AppColors.textOnDark
-                                          : AppColors.textOnLight,
-                                    ),
-                              ),
-                              const SizedBox(height: AppSpacing.paddingS),
-                              Text(
-                                _formatNumber(data.citizens),
-                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                      color: AppColors.primary,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.paddingM),
-                      Expanded(
-                        child: CustomCard(
-                          child: Column(
-                            children: [
-                              Text(
-                                'expats'.tr,
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: Theme.of(context).brightness == Brightness.dark
-                                          ? AppColors.textOnDark
-                                          : AppColors.textOnLight,
-                                    ),
-                              ),
-                              const SizedBox(height: AppSpacing.paddingS),
-                              Text(
-                                _formatNumber(data.expats),
-                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                      color: AppColors.secondary,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.paddingM),
 
                   // Navigation buttons
                   CustomButton(
                     text: 'residency_title'.tr,
                     onPressed: () => Get.toNamed(AppRoutes.residency),
                   ),
-                  const SizedBox(height: AppSpacing.paddingM),
 
-                  CustomButton(
-                    text: 'city_distribution'.tr,
-                    onPressed: () => Get.toNamed(AppRoutes.censusCityDistribution),
-                  ),
-                  const SizedBox(height: AppSpacing.paddingM),
-                  CustomButton(
-                    text: 'demographics'.tr,
-                    onPressed: () => Get.toNamed(AppRoutes.censusDemographics),
-                    isPrimary: false,
-                  ),
-                  const SizedBox(height: AppSpacing.paddingM),
-                  CustomButton(
-                    text: 'ai_forecasts'.tr,
-                    onPressed: () => Get.toNamed(AppRoutes.censusForecasts),
-                    isPrimary: false,
-                  ),
-                  const SizedBox(height: AppSpacing.paddingM),
-                  CustomButton(
-                    text: 'service_analytics'.tr,
-                    onPressed: () => Get.toNamed(AppRoutes.censusServices),
-                    isPrimary: false,
-                  ),
                 ],
               );
             }),

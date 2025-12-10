@@ -1,7 +1,7 @@
  {
   "app_title": "Interactive Residency & Smart Expat Insights",
   "residency_title": "Residency Update",
-  "dashboard_title": "Government Dashboard",
+  "dashboard_title": "Smart Statistics Centre",
   "settings_title": "Settings",
   "current_city": "Current City",
   "district": "District / Neighborhood",
@@ -98,6 +98,10 @@
   "labor": "Labor",
   "family_members": "Family Members",
   "interactive_residency": "Interactive Residency",
-  "appointments": "Statistics and forecasts"
+  "appointments": "Statistics and forecasts",
+  "heatmap_details": "Area Details",
+  "density": "Density",
+  "close": "Close",
+  "city": "City"
 }
 

@@ -1,7 +1,7 @@
 {
   "app_title": "تحديث الإقامة والرؤى الذكية",
   "residency_title": "تحديث الإقامة",
-  "dashboard_title": "لوحة تحكم الحكومية",
+  "dashboard_title": "مركز الاحصاء الذكي",
   "settings_title": "الإعدادات",
   "current_city": "المدينة الحالية",
   "district": "الحي / المنطقة",
@@ -98,6 +98,10 @@
   "labor": "العمالة",
   "family_members": "أفراد الأسرة",
   "interactive_residency": "الإقامة التفاعلية",
-  "appointments": "الاحصاءات والتنبؤات"
+  "appointments": "الاحصاءات والتنبؤات",
+  "heatmap_details": "تفاصيل المنطقة",
+  "density": "الكثافة",
+  "close": "إغلاق",
+  "city": "المدينة"
 }
 

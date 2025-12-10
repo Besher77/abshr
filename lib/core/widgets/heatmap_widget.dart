@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../../utils/cities.dart';
@@ -95,35 +96,197 @@ class HeatmapWidget extends StatelessWidget {
       orElse: () => {},
     );
 
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(4),
-        border: pointData.isNotEmpty
-            ? Border.all(
-                color: isDark
-                    ? AppColors.textPrimaryDark
-                    : AppColors.textPrimaryLight,
-                width: 1,
+    return GestureDetector(
+      onTap: pointData.isNotEmpty
+          ? () => _showDetailsDialog(context, pointData)
+          : null,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(4),
+          border: pointData.isNotEmpty
+              ? Border.all(
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimaryLight,
+                  width: 1,
+                )
+              : null,
+        ),
+        child: pointData.isNotEmpty
+            ? Tooltip(
+                message: '${_getLocalizedCity(pointData)} - ${_getLocalizedDistrict(pointData)}\n'
+                    '${pointData['expats'] ?? pointData['population'] ?? 0} ${pointData['expats'] != null ? 'expats' : 'population'}\n'
+                    'Tap for details',
+                child: Center(
+                  child: Text(
+                    '${pointData['density']}',
+                    style: const TextStyle(
+                      color: AppColors.textOnPrimary,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               )
             : null,
       ),
-      child: pointData.isNotEmpty
-          ? Tooltip(
-              message: '${_getLocalizedCity(pointData)} - ${_getLocalizedDistrict(pointData)}\n'
-                  '${pointData['expats'] ?? pointData['population'] ?? 0} ${pointData['expats'] != null ? 'expats' : 'population'}',
-              child: Center(
-                child: Text(
-                  '${pointData['density']}',
-                  style: const TextStyle(
-                    color: AppColors.textOnPrimary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
+    );
+  }
+
+  void _showDetailsDialog(BuildContext context, Map<String, dynamic> pointData) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cityName = _getLocalizedCity(pointData);
+    final districtName = _getLocalizedDistrict(pointData);
+    final density = pointData['density'] ?? 0;
+    final expats = pointData['expats'] ?? pointData['population'] ?? 0;
+    final hasExpats = pointData['expats'] != null;
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: isDark
+            ? AppColors.backgroundSecondary
+            : AppColors.cardBackgroundWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusL),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.paddingL),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'heatmap_details'.tr,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textOnDark
+                              : AppColors.textOnLight,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.textOnDark
+                        : AppColors.textOnLight,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.paddingL),
+              
+              // City
+              _buildDetailRow(
+                context,
+                Icons.location_city,
+                'city'.tr,
+                cityName,
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              
+              // District
+              if (districtName.isNotEmpty) ...[
+                _buildDetailRow(
+                  context,
+                  Icons.map,
+                  'district'.tr,
+                  districtName,
+                ),
+                const SizedBox(height: AppSpacing.paddingM),
+              ],
+              
+              // Density
+              _buildDetailRow(
+                context,
+                Icons.bar_chart,
+                'density'.tr,
+                '$density',
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              
+              // Population/Expats
+              _buildDetailRow(
+                context,
+                Icons.people,
+                hasExpats ? 'total_expats'.tr : 'total_population'.tr,
+                '$expats',
+              ),
+              
+              const SizedBox(height: AppSpacing.paddingL),
+              
+              // Close button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.textOnPrimary,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.paddingM,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusM),
+                    ),
+                  ),
+                  child: Text('close'.tr),
                 ),
               ),
-            )
-          : null,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: AppColors.primary,
+          size: 20,
+        ),
+        const SizedBox(width: AppSpacing.paddingM),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
+                    ),
+              ),
+              const SizedBox(height: AppSpacing.paddingXS),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: isDark
+                          ? AppColors.textOnDark
+                          : AppColors.textOnLight,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
