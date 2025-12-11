@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/utils/theme_helper.dart';
 import '../controllers/login_controller.dart';
 
 /// Login view - UI only
@@ -12,10 +13,16 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
+    final args = Get.arguments;
+    final role = args is Map<String, dynamic> ? args['role'] as String? : null;
+    final primaryColor = ThemeHelper.getPrimaryColor(role);
+    final borderFocusColor = ThemeHelper.getBorderFocusColor(role);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(),
       body: SafeArea(
+
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.paddingL),
@@ -39,14 +46,14 @@ class LoginView extends StatelessWidget {
                 // Username/ID Field
                 _buildFieldLabel('login_username_label'.tr, context),
                 const SizedBox(height: AppSpacing.paddingS),
-                _buildUsernameField(controller, context),
+                _buildUsernameField(controller, context, borderFocusColor),
                 
                 const SizedBox(height: AppSpacing.paddingL),
                 
                 // Password Field
                 _buildFieldLabel('login_password_label'.tr, context),
                 const SizedBox(height: AppSpacing.paddingS),
-                _buildPasswordField(controller, context),
+                _buildPasswordField(controller, context, borderFocusColor, primaryColor),
                 
                 const SizedBox(height: AppSpacing.paddingM),
                 
@@ -64,8 +71,8 @@ class LoginView extends StatelessWidget {
                     ),
                     child: Text(
                       'login_forgot_password'.tr,
-                      style: const TextStyle(
-                        color: AppColors.primary,
+                      style: TextStyle(
+                        color: primaryColor,
                         fontSize: 14,
                       ),
                     ),
@@ -78,7 +85,7 @@ class LoginView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: controller.login,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: primaryColor,
                     foregroundColor: AppColors.textOnPrimary,
                     padding: const EdgeInsets.symmetric(
                       vertical: AppSpacing.paddingM,
@@ -111,8 +118,8 @@ class LoginView extends StatelessWidget {
                     ),
                     child: Text(
                       'login_new_user'.tr,
-                      style: const TextStyle(
-                        color: AppColors.primary,
+                      style: TextStyle(
+                        color: primaryColor,
                         fontSize: 14,
                       ),
                     ),
@@ -137,7 +144,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildUsernameField(LoginController controller, BuildContext context) {
+  Widget _buildUsernameField(LoginController controller, BuildContext context, Color borderFocusColor) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final borderColor = isDark ? AppColors.borderDark : AppColors.borderLight;
     final fillColor = isDark ? AppColors.backgroundSecondary : AppColors.backgroundLight;
@@ -172,8 +179,8 @@ class LoginView extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusM),
-          borderSide: const BorderSide(
-            color: AppColors.borderFocus,
+          borderSide: BorderSide(
+            color: borderFocusColor,
             width: 1,
           ),
         ),
@@ -190,7 +197,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildPasswordField(LoginController controller, BuildContext context) {
+  Widget _buildPasswordField(LoginController controller, BuildContext context, Color borderFocusColor, Color primaryColor) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final borderColor = isDark ? AppColors.borderDark : AppColors.borderLight;
     final fillColor = isDark ? AppColors.backgroundSecondary : AppColors.backgroundLight;
@@ -227,8 +234,8 @@ class LoginView extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSpacing.radiusM),
-            borderSide: const BorderSide(
-              color: AppColors.borderFocus,
+            borderSide: BorderSide(
+              color: borderFocusColor,
               width: 1,
             ),
           ),
@@ -246,7 +253,7 @@ class LoginView extends StatelessWidget {
               controller.isPasswordVisible.value
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: AppColors.primary,
+              color: primaryColor,
               size: 20,
             ),
             onPressed: controller.togglePasswordVisibility,

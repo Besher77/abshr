@@ -18,5 +18,8 @@ class AppRoutes {
   static const String censusServices = '/census/services';
   static const String settings = '/settings';
   static const String login = '/login';
+  static const String welcome = '/welcome';
+  static const String businessStats = '/business/stats';
+  static const String businessForecasts = '/business/forecasts';
 }
 

@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
       ],
       
       // Routing
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.welcome,
       getPages: AppPages.pages,
       
       // RTL support

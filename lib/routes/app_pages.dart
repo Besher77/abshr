@@ -14,6 +14,9 @@ import '../modules/census/views/census_forecasts_view.dart';
 import '../modules/census/views/census_services_view.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/welcome/views/welcome_view.dart';
+import '../modules/business_stats/views/business_stats_view.dart';
+import '../modules/business_forecasts/views/business_forecasts_view.dart';
 import 'app_routes.dart';
 
 /// App pages configuration for GetX routing
@@ -22,6 +25,11 @@ class AppPages {
 
   static final List<GetPage> pages = [
     GetPage(
+      name: AppRoutes.welcome,
+      page: () => const WelcomeView(),
+    ),
+    GetPage(
+
       name: AppRoutes.login,
       page: () => const LoginView(),
     ),
@@ -80,6 +88,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.settings,
       page: () => const SettingsView(),
+    ),
+    GetPage(
+      name: AppRoutes.businessStats,
+      page: () => const BusinessStatsView(),
+    ),
+    GetPage(
+      name: AppRoutes.businessForecasts,
+      page: () => const BusinessForecastsView(),
     ),
   ];
 }

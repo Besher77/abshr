@@ -7,6 +7,9 @@ class ResidencyModel {
   final String country;
   final int residentsInsideKSA;
   final int residentsOutsideKSA;
+  final double averageIncome;
+  final int dependentsCount;
+  final String educationLevel;
   final DateTime updatedAt;
 
   ResidencyModel({
@@ -16,6 +19,9 @@ class ResidencyModel {
     required this.country,
     required this.residentsInsideKSA,
     required this.residentsOutsideKSA,
+    required this.averageIncome,
+    required this.dependentsCount,
+    required this.educationLevel,
     required this.updatedAt,
   });
 
@@ -27,6 +33,9 @@ class ResidencyModel {
       'country': country,
       'residentsInsideKSA': residentsInsideKSA,
       'residentsOutsideKSA': residentsOutsideKSA,
+      'averageIncome': averageIncome,
+      'dependentsCount': dependentsCount,
+      'educationLevel': educationLevel,
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
@@ -39,6 +48,9 @@ class ResidencyModel {
       country: json['country'] ?? '',
       residentsInsideKSA: json['residentsInsideKSA'] ?? 0,
       residentsOutsideKSA: json['residentsOutsideKSA'] ?? 0,
+      averageIncome: (json['averageIncome'] ?? 0.0).toDouble(),
+      dependentsCount: json['dependentsCount'] ?? 0,
+      educationLevel: json['educationLevel'] ?? '',
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }

@@ -7,6 +7,7 @@ import '../../../core/widgets/custom_appbar.dart';
 import '../../../core/widgets/custom_card.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/theme_helper.dart';
 import '../../../routes/app_routes.dart';
 
 /// Dashboard main view - UI only
@@ -16,7 +17,11 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DashboardController());
+    final args = Get.arguments;
+    final role = args is Map<String, dynamic> ? args['role'] as String? : null;
     final causes = Get.put(CensusController());
+    final primaryColor = ThemeHelper.getPrimaryColor(role);
+    final secondaryColor = ThemeHelper.getSecondaryColor(role);
 
     return SafeArea(
       child: Scaffold(
@@ -51,7 +56,7 @@ return              Row(
             Text(
               _formatNumber(data!.citizens),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: AppColors.primary,
+                color: primaryColor,
               ),
             ),
           ],
@@ -76,7 +81,7 @@ return              Row(
             Text(
               _formatNumber(data.totalPopulation),
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: AppColors.primary,
+                color: primaryColor,
               ),
             ),
           ],
@@ -101,7 +106,7 @@ return              Row(
             Text(
               _formatNumber(data.expats),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: AppColors.secondary,
+                color: secondaryColor,
               ),
             ),
           ],
@@ -136,12 +141,14 @@ return              Row(
                     'by_nationality'.tr,
                     Icons.flag,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'nationality'),
+                    primaryColor,
                   ),
                   _buildStatCard(
                     context,
                     'by_city'.tr,
                     Icons.location_city,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'city'),
+                    primaryColor,
                   ),
       
                   _buildStatCard(
@@ -149,24 +156,28 @@ return              Row(
                     'by_district'.tr,
                     Icons.map,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'district'),
+                    primaryColor,
                   ),
                   _buildStatCard(
                     context,
                     'by_gender'.tr,
                     Icons.people,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'gender'),
+                    primaryColor,
                   ),
                   _buildStatCard(
                     context,
                     'by_age'.tr,
                     Icons.calendar_today,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'age'),
+                    primaryColor,
                   ),
                   _buildStatCard(
                     context,
                     'by_job_type'.tr,
                     Icons.work,
                     () => Get.toNamed(AppRoutes.dashboardStats, arguments: 'job_type'),
+                    primaryColor,
                   ),
                     ],
                   );
@@ -200,12 +211,22 @@ return              Row(
                 isPrimary: false,
               ),
               const SizedBox(height: AppSpacing.paddingM),
+              if (role == 'business')
+                CustomButton(
+                  text: 'business_stats_title'.tr,
+                  onPressed: () => Get.toNamed(
+                    AppRoutes.businessStats,
+                    arguments: args,
+                  ),
+                  isPrimary: false,
+                ),
+              const SizedBox(height: AppSpacing.paddingM),
       
               CustomCard(
                 onTap: () => Get.toNamed(AppRoutes.dashboardHeatmap),
                 child: Row(
                   children: [
-                    const Icon(Icons.map, color: AppColors.primary),
+                    Icon(Icons.map, color: primaryColor),
                     const SizedBox(width: AppSpacing.paddingM),
                         Expanded(
                       child: Text(
@@ -226,7 +247,7 @@ return              Row(
                 onTap: () => Get.toNamed(AppRoutes.dashboardMovement),
                 child: Row(
                   children: [
-                    const Icon(Icons.show_chart, color: AppColors.primary),
+                    Icon(Icons.show_chart, color: primaryColor),
                     const SizedBox(width: AppSpacing.paddingM),
                         Expanded(
                       child: Text(
@@ -247,7 +268,7 @@ return              Row(
                 onTap: () => Get.toNamed(AppRoutes.dashboardPredictions),
                 child: Row(
                   children: [
-                    const Icon(Icons.psychology, color: AppColors.primary),
+                    Icon(Icons.psychology, color: primaryColor),
                     const SizedBox(width: AppSpacing.paddingM),
                         Expanded(
                       child: Text(
@@ -287,6 +308,7 @@ return              Row(
     String title,
     IconData icon,
     VoidCallback onTap,
+    Color iconColor,
   ) {
     // Responsive icon size based on screen width
     final screenWidth = MediaQuery.of(context).size.width;
@@ -304,7 +326,7 @@ return              Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Icon(icon, size: iconSize, color: AppColors.primary),
+            child: Icon(icon, size: iconSize, color: iconColor),
           ),
           SizedBox(height: AppSpacing.paddingS),
           Flexible(

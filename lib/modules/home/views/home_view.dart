@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/custom_appbar.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/utils/theme_helper.dart';
 import '../../../routes/app_routes.dart';
 
 /// Home view - Main entry point
@@ -14,6 +15,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isRTL = Get.locale?.languageCode == 'ar';
+    final args = Get.arguments;
+    final role = args is Map<String, dynamic> ? args['role'] as String? : null;
+    final primaryColor = ThemeHelper.getPrimaryColor(role);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -49,52 +53,7 @@ class HomeView extends StatelessWidget {
                   crossAxisSpacing: AppSpacing.paddingM,
                   mainAxisSpacing: AppSpacing.paddingM,
                   childAspectRatio: 1.4,
-                  children: [
-                    _buildServiceCard(
-                      context,
-                      Icons.directions_car_outlined,
-                      'vehicles'.tr,
-                      () {
-                        // Navigate to vehicles
-                      },
-                    ),
-                    _buildServiceCard(
-                      context,
-                      Icons.laptop_outlined,
-                      'my_services'.tr,
-                      () {
-                        // Navigate to my services
-                      },
-                    ),
-                    _buildServiceCard(
-                      context,
-                      Icons.construction_outlined,
-                      'labor'.tr,
-                      () {
-                        // Navigate to labor
-                      },
-                    ),
-                    _buildServiceCard(
-                      context,
-                      Icons.family_restroom,
-                      'family_members'.tr,
-                      () {
-                        // Navigate to family members
-                      },
-                    ),
-                    _buildServiceCard(
-                      context,
-                      Icons.home_work_outlined,
-                      'interactive_residency'.tr,
-                       () => Get.toNamed(AppRoutes.censusHub),
-                    ),
-                    _buildServiceCard(
-                      context,
-                      Icons.dashboard,
-                      'appointments'.tr,
-                          () => Get.toNamed(AppRoutes.dashboard),
-                    ),
-                  ],
+                  children: _buildCards(context, primaryColor, args, role),
                 ),
               ],
             ),
@@ -102,6 +61,108 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildCards(
+    BuildContext context,
+    Color primaryColor,
+    dynamic args,
+    String? role,
+  ) {
+    final cards = <Widget>[
+      _buildServiceCard(
+        context,
+        Icons.directions_car_outlined,
+        'vehicles'.tr,
+        primaryColor,
+        () {
+          // Navigate to vehicles
+        },
+      ),
+      _buildServiceCard(
+        context,
+        Icons.laptop_outlined,
+        'my_services'.tr,
+        primaryColor,
+        () {
+          // Navigate to my services
+        },
+      ),
+      _buildServiceCard(
+        context,
+        Icons.construction_outlined,
+        'labor'.tr,
+        primaryColor,
+        () {
+          // Navigate to labor
+        },
+      ),
+      _buildServiceCard(
+        context,
+        Icons.family_restroom,
+        'family_members'.tr,
+        primaryColor,
+        () {
+          // Navigate to family members
+        },
+      ),
+    ];
+
+    // Role-specific cards
+    if (role == 'business') {
+      cards.add(
+        _buildServiceCard(
+          context,
+          Icons.bar_chart,
+          'business_stats_title'.tr,
+          primaryColor,
+          () => Get.toNamed(AppRoutes.businessStats, arguments: args),
+        ),
+      );
+    }
+
+    if (role == 'individual') {
+      cards.add(
+        _buildServiceCard(
+          context,
+          Icons.home_work_outlined,
+          'interactive_residency'.tr,
+          primaryColor,
+          () => Get.toNamed(AppRoutes.censusHub),
+        ),
+      );
+    }
+
+    if (role == 'government') {
+      cards.addAll([
+        _buildServiceCard(
+          context,
+          Icons.dashboard,
+          'appointments'.tr,
+          primaryColor,
+          () => Get.toNamed(AppRoutes.dashboard, arguments: args),
+        ),
+        _buildServiceCard(
+          context,
+          Icons.analytics_outlined,
+          'business_statistics_and_forecasts'.tr,
+          primaryColor,
+          () => Get.toNamed(AppRoutes.businessForecasts, arguments: args),
+        ),
+      ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    return cards;
   }
 
   Widget _buildSearchBar(BuildContext context, bool isDark, bool isRTL) {
@@ -148,6 +209,7 @@ class HomeView extends StatelessWidget {
     BuildContext context,
     IconData icon,
     String title,
+    Color iconColor,
     VoidCallback onTap,
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -176,7 +238,7 @@ class HomeView extends StatelessWidget {
               Icon(
                 icon,
                 size: 36,
-                color: AppColors.primary,
+                color: iconColor,
               ),
               const SizedBox(height: AppSpacing.paddingS),
               Text(

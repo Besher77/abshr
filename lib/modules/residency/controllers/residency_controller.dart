@@ -14,6 +14,8 @@ class ResidencyController extends GetxController {
   final workplaceController = TextEditingController();
   final residentsInsideKSAController = TextEditingController();
   final residentsOutsideKSAController = TextEditingController();
+  final averageIncomeController = TextEditingController();
+  final dependentsCountController = TextEditingController();
 
   // Form key
   final formKey = GlobalKey<FormState>();
@@ -26,6 +28,9 @@ class ResidencyController extends GetxController {
 
   // Selected country
   final selectedCountry = RxString('');
+
+  // Selected education level
+  final selectedEducationLevel = RxString('');
 
   @override
   void onInit() {
@@ -40,6 +45,8 @@ class ResidencyController extends GetxController {
     workplaceController.dispose();
     residentsInsideKSAController.dispose();
     residentsOutsideKSAController.dispose();
+    averageIncomeController.dispose();
+    dependentsCountController.dispose();
     super.onClose();
   }
 
@@ -55,6 +62,9 @@ class ResidencyController extends GetxController {
       selectedCountry.value = savedData.country;
       residentsInsideKSAController.text = savedData.residentsInsideKSA.toString();
       residentsOutsideKSAController.text = savedData.residentsOutsideKSA.toString();
+      averageIncomeController.text = savedData.averageIncome.toString();
+      dependentsCountController.text = savedData.dependentsCount.toString();
+      selectedEducationLevel.value = savedData.educationLevel;
     }
   }
 
@@ -74,6 +84,9 @@ class ResidencyController extends GetxController {
         country: selectedCountry.value,
         residentsInsideKSA: int.parse(residentsInsideKSAController.text.trim()),
         residentsOutsideKSA: int.parse(residentsOutsideKSAController.text.trim()),
+        averageIncome: double.tryParse(averageIncomeController.text.trim()) ?? 0.0,
+        dependentsCount: int.tryParse(dependentsCountController.text.trim()) ?? 0,
+        educationLevel: selectedEducationLevel.value,
         updatedAt: DateTime.now(),
       );
 

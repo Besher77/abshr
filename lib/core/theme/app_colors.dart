@@ -45,6 +45,20 @@ class AppColors {
   static const Color warning = Color(0xFFFF9800);
   static const Color info = Color(0xFF2196F3);
 
+  // Business Colors - Blue Theme
+  static const Color businessPrimary = Color(0xFF2196F3); // Blue
+  static const Color businessPrimaryDark = Color(0xFF1976D2);
+  static const Color businessPrimaryLight = Color(0xFF64B5F6);
+  static const Color businessSecondary = Color(0xFF42A5F5);
+  static const Color businessBorderFocus = Color(0xFF2196F3); // Blue focus border
+
+  // Government Colors - Brown Theme
+  static const Color governmentPrimary = Color(0xFF8B6F47); // Brown
+  static const Color governmentPrimaryDark = Color(0xFF6B5637);
+  static const Color governmentPrimaryLight = Color(0xFFA6896B);
+  static const Color governmentSecondary = Color(0xFF9D7F5F);
+  static const Color governmentBorderFocus = Color(0xFF8B6F47); // Brown focus border
+
   // Border Colors - Dark Theme
   static const Color borderDark = Color(0xFF424242); // Dark border
   

@@ -10,6 +10,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../utils/validators.dart';
 import '../../../utils/countries.dart';
+import '../../../utils/education_levels.dart';
 
 /// Residency form view - UI only
 class ResidencyFormView extends StatelessWidget {
@@ -112,6 +113,46 @@ class ResidencyFormView extends StatelessWidget {
                 validator: Validators.number,
                 keyboardType: TextInputType.number,
               ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomTextField(
+                labelKey: 'average_income',
+                controller: controller.averageIncomeController,
+                validator: Validators.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                hintKey: 'average_income_hint',
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              CustomTextField(
+                labelKey: 'dependents_count',
+                controller: controller.dependentsCountController,
+                validator: Validators.number,
+                keyboardType: TextInputType.number,
+                hintKey: 'dependents_count_hint',
+              ),
+              const SizedBox(height: AppSpacing.paddingM),
+              // Education level dropdown
+              Obx(() {
+                final locale = Get.locale?.languageCode ?? 'en';
+                return CustomDropdown<String>(
+                  labelKey: 'education_level',
+                  hintKey: 'select_education_level',
+                  value: controller.selectedEducationLevel.value.isEmpty 
+                      ? null 
+                      : controller.selectedEducationLevel.value,
+                  items: EducationLevels.getDropdownItems(locale),
+                  onChanged: (value) {
+                    if (value != null) {
+                      controller.selectedEducationLevel.value = value;
+                    }
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'validation_required'.tr;
+                    }
+                    return null;
+                  },
+                );
+              }),
               const SizedBox(height: AppSpacing.paddingXL),
 
               // Submit button

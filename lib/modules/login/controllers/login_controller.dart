@@ -34,7 +34,13 @@ class LoginController extends GetxController {
       usernameController.text,
       passwordController.text,
     );
-    Get.offAllNamed(AppRoutes.home);
+    final redirect = Get.arguments is Map<String, dynamic>
+        ? (Get.arguments['redirect'] as String?)
+        : null;
+    Get.toNamed(
+      redirect ?? AppRoutes.home,
+      arguments: Get.arguments,
+    );
   }
 }
 

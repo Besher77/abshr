@@ -86,3 +86,4 @@ https://your-project-id.firebaseapp.com
 - يمكنك اختبار التطبيق محلياً باستخدام: `firebase serve`
 - جميع الملفات في `build/web` ستُرفع إلى Firebase Hosting
 
+
